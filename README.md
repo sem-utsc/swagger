@@ -11,7 +11,7 @@ Este proyecto es una API REST para consultar, crear y eliminar personajes de Cla
 
 1. **Clona el repositorio o navega a la carpeta del proyecto:**
    ```bash
-   cd /home/sem-hernandez/cursos/swagger/swagger-go
+   cd /home/<docs-folder>/swagger/swagger-go
    ```
 
 2. **Ejecuta el servidor:**
