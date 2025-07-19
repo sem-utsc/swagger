@@ -1,0 +1,270 @@
+openapi: 3.0.4
+info:
+  title: Characters API
+  version: 1.0.0
+  description: Plantilla  de Open Api 3.0.4 para consultar, crear y eliminar cartas de Clash Royale.
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /characters:
+    get:
+      summary: Obtener una lista de personajes
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Número de página
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 10
+          description: Límite de personajes por página
+      responses:
+        '200':
+          description: Lista de personajes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  PaginaActual:
+                    type: integer
+                    example: 1
+                  NumTotalPaginas:
+                    type: integer
+                    example: 32
+                  PersonajesPorPagina:
+                    type: integer
+                    example: 1
+                  TotalPersonajes:
+                    type: integer
+                    example: 32
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 2
+                        nombre:
+                          type: string
+                          example: Mago Eléctrico
+                        calidad:
+                          type: string
+                          example: Épica
+                        clase:
+                          type: string
+                          example: Apoyo
+                        salud:
+                          type: integer
+                          example: 944
+                        ataque:
+                          type: integer
+                          example: 159
+                        fechaCreacion:
+                          type: string
+                          format: date-time
+                          example: "2025-06-24T00:00:00.000Z"
+
+ 
+    post:
+      summary: Crear un nuevo personaje
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - nombre
+                - calidad
+                - clase
+                - salud
+                - ataque
+              properties:
+                nombre:
+                  type: string
+                  example: Perro Gelido
+                calidad:
+                  type: string
+                  example: Epico
+                clase:
+                  type: string
+                  example: Tanque
+                salud:
+                  type: integer
+                  example: 5000
+                ataque:
+                  type: integer
+                  example: 200
+      responses:
+        '200':
+          description: Personaje creado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 35
+                  nombre:
+                    type: string
+                    example: Perro Gel
+                  calidad:
+                    type: string
+                    example: Epico
+                  clase:
+                    type: string
+                    example: Tanque
+                  salud:
+                    type: integer
+                    example: 5000
+                  ataque:
+                    type: integer
+                    example: 200
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: "2025-07-05T01:39:37.063Z"
+        '400':
+          description: Error de parametros
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - Nombre es requerido
+                      - Calidad es requerida
+                      - Clase es requerida
+                      - Salud debe ser un número
+                      - Ataque debe ser un número
+                  status: 
+                    type: integer
+                    example: 404
+        '404':
+          description: Character ya creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: 404
+                  message:
+                    type: string 
+                    example: "Alredy exist Character in database"
+
+  /characters/{id}:
+    delete:
+      summary: Eliminar un personaje por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID del personaje a eliminar
+      responses:
+        '200':
+          description: Personaje eliminado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: ok
+        '404':
+          description: Personaje no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not delete character
+                  status: 
+                    type: integer
+                    example: 404
+
+  /api/ClashRoyale/Media:
+    post:
+      summary: Obtener publicaciones oficiales de Clash Royale
+      description: >
+        Este endpoint permite obtener publicaciones del perfil oficial de Clash Royale desde la API de Twitter. 
+        Requiere autenticación Bearer (el mismo token del body) y envío obligatorio de `token` y `query`.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - query
+              properties:
+                token:
+                  type: string
+                  example: AAAAAAAAAAAAAAAAAAAAADXo2AEAAAAAb1irf1fBFB4AyI6rf3ORVJU3jWI%3DlVoj1Q4z6YDIycoAXgxRg8CmnPRdEs7FqJ9rDb2RnB2NzvzxdA
+                query:
+                  type: string
+                  example: from:ClashRoyale
+      responses:
+        '200':
+          description: Publicaciones recuperadas exitosamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "1943777316498551191"
+                    text:
+                      type: string
+                      example: "One Barrel not enough? How 'bout two? 💀\n\nSkeleton Barrel Evolution Draft Challenge awaits https://t.co/tWk821lYTf"
+                    author:
+                      type: string
+                      example: "ClashRoyale"
+
+        '400':
+          description: Faltan parámetros obligatorios en el body
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Bad request, token and query are required
+
+        '429':
+          description: Límite de peticiones excedido (rate limit de Twitter)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error from Twitter API
+                  details:
+                    type: string
+                    example: '{"title":"Too Many Requests","detail":"Too Many Requests","type":"about:blank","status":429}'
