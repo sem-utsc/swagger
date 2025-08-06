@@ -2,7 +2,11 @@ openapi: 3.0.4
 info:
   title: Characters API
   version: 1.0.0
-  description: Plantilla  de Open Api 3.0.4 para consultar, crear y eliminar cartas de Clash Royale.
+  description: | 
+    Plantilla  de Open Api 3.0.4 para consultar, crear y eliminar cartas de Clash Royale.
+    ## Equipo 1
+    - Sem Hernandez
+    - Sem Hernandez
 
 servers:
   - url: http://localhost:3000
