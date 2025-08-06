@@ -4,9 +4,10 @@ info:
   version: 1.0.0
   description: | 
     Plantilla  de Open Api 3.0.4 para consultar, crear y eliminar cartas de Clash Royale.
-    ## Equipo 1
+    **Equipo 1**
     - Sem Hernandez
     - Sem Hernandez
+    [swagger.git](https://github.com/sem-utsc/swagger)
 
 servers:
   - url: http://localhost:3000
